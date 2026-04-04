@@ -1,0 +1,20 @@
+{
+  "name": "bist-dashboard",
+  "version": "1.0.0",
+  "description": "\"# BIST Dashboard\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tankut-netizen/bist-dashboard/issues"
+  },
+  "homepage": "https://github.com/tankut-netizen/bist-dashboard#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
