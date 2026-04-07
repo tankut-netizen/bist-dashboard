@@ -23,11 +23,15 @@ app.get('/bist', async (req, res) => {
       results.push(quote);
       await new Promise(r => setTimeout(r, 300));
     }
+    const usdRate = await yahooFinance.quote('USDTRY=X');
+    const tryPerUsd = usdRate.regularMarketPrice;
+
     res.json(results.map(stock => ({
       symbol: stock.symbol,
       name: stock.shortName,
       price: stock.regularMarketPrice,
-      change: stock.regularMarketChangePercent
+      change: stock.regularMarketChangePercent,
+      marketCapUSD: stock.marketCap ? parseFloat((stock.marketCap / tryPerUsd / 1_000_000).toFixed(2)) : null
     })));
   } catch (err) {
     res.status(500).json({ error: err.message });
