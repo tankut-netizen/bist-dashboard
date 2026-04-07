@@ -1,5 +1,5 @@
 const express = require('express');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const yahooFinance = require('yahoo-finance2').default;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -14,18 +14,16 @@ app.get('/', (req, res) => {
 
 app.get('/bist', async (req, res) => {
   try {
-    const response = await fetch('https://evo.fintables.com/mcp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tool: 'veri_sorgula',
-        input: {
-          sql: "SELECT hisse_senedi_kodu, kapanis FROM mumlar_gunluk_gh WHERE 'XU050' = ANY(endeksler) ORDER BY tarih DESC LIMIT 50"
-        }
-      })
-    });
-    const data = await response.json();
-    res.json(data);
+    const symbols = ['THYAO.IS', 'GARAN.IS', 'AKBNK.IS', 'EREGL.IS', 'BIMAS.IS'];
+    const results = await Promise.all(
+      symbols.map(symbol => yahooFinance.quote(symbol))
+    );
+    res.json(results.map(stock => ({
+      symbol: stock.symbol,
+      name: stock.shortName,
+      price: stock.regularMarketPrice,
+      change: stock.regularMarketChangePercent
+    })));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
