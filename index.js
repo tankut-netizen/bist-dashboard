@@ -15,7 +15,8 @@ app.get('/', (req, res) => {
 
 app.get('/bist', async (req, res) => {
   try {
-    const symbols = ['THYAO.IS', 'GARAN.IS', 'AKBNK.IS', 'EREGL.IS', 'BIMAS.IS'];
+    const input = req.query.symbols;
+    const symbols = input ? input.split(',') : ['THYAO.IS', 'GARAN.IS', 'AKBNK.IS', 'EREGL.IS', 'BIMAS.IS'];
     const results = await Promise.all(
       symbols.map(symbol => yahooFinance.quote(symbol))
     );
