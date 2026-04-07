@@ -17,9 +17,12 @@ app.get('/bist', async (req, res) => {
   try {
     const input = req.query.symbols;
     const symbols = input ? input.split(',') : ['THYAO.IS', 'GARAN.IS', 'AKBNK.IS', 'EREGL.IS', 'BIMAS.IS'];
-    const results = await Promise.all(
-      symbols.map(symbol => yahooFinance.quote(symbol))
-    );
+    const results = [];
+    for (const symbol of symbols) {
+      const quote = await yahooFinance.quote(symbol);
+      results.push(quote);
+      await new Promise(r => setTimeout(r, 300));
+    }
     res.json(results.map(stock => ({
       symbol: stock.symbol,
       name: stock.shortName,
